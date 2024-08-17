@@ -42,7 +42,7 @@ jobs:
       shell: pwsh
       run: |
         {
-          $roles = 'roles=[\"' + ("${{github.event.inputs.roles}}" -join '\",\"') + '\"]'
+          $roles = 'roles=["' + ("${{github.event.inputs.roles}}" -join '","') + '"]'
           $principalId = "principal_object_id=${{github.event.inputs.principal_object_id}}"
           echo ::set-output name=roles::$($roles)
           echo ::set-output name=principalId::$($principalId)
@@ -66,4 +66,4 @@ jobs:
 
     # Terraform Apply
     - name: Terraform Apply
-      run: terraform apply -auto-approve -var="${{steps.tf-variables.output.roles}}" -var="${{steps.tf-variables.output.principalId}}" -auto-approve -input=false -compact-warnings
+      run: terraform apply -auto-approve -var='${{steps.tf-variables.output.roles}}' -var='${{steps.tf-variables.output.principalId}}' -auto-approve -input=false -compact-warnings
