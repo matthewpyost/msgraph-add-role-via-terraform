@@ -14,12 +14,11 @@ terraform {
     storage_account_name = "terraformgithubactions"
     container_name       = "tfstate"
     key                  = "terraform.tfstate"
-    use_oidc             = true
   }
 }
 
 provider "azuread" {
-  use_oidc = true
+
 }
 
 module "msgraph_app_role_assignment" {
