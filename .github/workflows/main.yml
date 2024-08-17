@@ -4,16 +4,16 @@ run-name: 'Add MS Graph roles ${{inputs.roles}} for ${{inputs.principal_object_i
 on: 
   workflow_dispatch:
     inputs:
+      environment:
+        description: 'Environment to run in'
+        type: environment
+        required: true            
       principal_object_id:
         description: 'The object ID of the Managed Identity the roles should be added to'     
         required: true
       roles:
         description: 'A comma delimited list of any of the following: Directory.Read.All, User.Read.All, Group.Read.All, Application.ReadWrite.OwnedBy'
         required: true
-      environment:
-        description: 'Environment to run in'
-        type: environment
-        required: true        
         
 defaults:
   run:
