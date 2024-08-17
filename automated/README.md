@@ -20,10 +20,10 @@ To use the above workflow in your environment, a DevOps/Cloud engineers will nee
 
     Terraform utilizes a [state file](https://www.terraform.io/language/state) to store information about the current state of your managed infrastructure and associated configuration. This file will need to be persisted between different runs of the workflow. This solution is currently configured to store this file within an Azure Storage Account. If you wish to change the backend storage to another provider, update the [Terraform backend block](main.tf#L12-L17) with your preferred provider. For the current configuration using Azure Storage Account, add the following environment variables to each Azure for each environment you created above:
 
-    - `TF_VAR_backend_resource_group_name` : The name of the Azure Resource group that contains the Azure Storage account you wish to use as backend storage
-    - `TF_VAR_backend_storage_account_name` : The name of the Azure Storage Account you wish to use as backend storage
-    - `TF_VAR_backend_container_name` : The name of the storage container in the Azure Storage Account you wish to use as backend storage; default is 'tfstate'
-    - `TF_VAR_backend_key` : The key to be used in the storage container in the Azure Storage Account you wish to use as backend storage; default is 'terraform.tfstate'
+    - `BACKEND_RESOURCE_GROUP_NAME` : The name of the Azure Resource group that contains the Azure Storage account you wish to use as backend storage
+    - `BACKEND_STORAGE_ACCOUNT_NAME` : The name of the Azure Storage Account you wish to use as backend storage
+    - `BACKEND_CONTAINER_NAME` : The name of the storage container in the Azure Storage Account you wish to use as backend storage
+    - `BACKEND_KEY` : The key to be used in the storage container in the Azure Storage Account you wish to use as backend storage
 
 3. **Setup Azure Identity**:
 
