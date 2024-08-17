@@ -65,4 +65,4 @@ jobs:
 
     # Terraform Apply
     - name: Terraform Apply
-      run: terraform apply -auto-approve -var='${{steps.tf-variables.output.roles}}' -var='${{steps.tf-variables.output.principalId}}' -auto-approve -input=false -compact-warnings
+      run: terraform apply -auto-approve -var='${{steps.tf-variables.outputs.roles}}' -var='${{steps.tf-variables.outputs.principalId}}' -auto-approve -input=false -compact-warnings
