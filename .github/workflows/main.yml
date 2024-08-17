@@ -42,8 +42,8 @@ jobs:
       shell: pwsh
       run: |
         {
-          $roles = 'roles=[\"' + ("${{github.event.inputs.roles}}"" -join '\",\"') + '\"]'
-          $principalId = ""principal_object_id=${{github.event.inputs.principal_object_id}}"
+          $roles = 'roles=[\"' + ("${{github.event.inputs.roles}}" -join '\",\"') + '\"]'
+          $principalId = "principal_object_id=${{github.event.inputs.principal_object_id}}"
           echo ::set-output name=roles::$($roles)
           echo ::set-output name=principalId::$($principalId)
         }
