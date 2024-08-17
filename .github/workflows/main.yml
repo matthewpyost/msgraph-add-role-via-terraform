@@ -44,8 +44,8 @@ jobs:
         {
           $roles = 'roles=["' + ("${{github.event.inputs.roles}}" -join '","') + '"]'
           $principalId = "principal_object_id=${{github.event.inputs.principal_object_id}}"
-          echo ::set-output name=roles::$($roles)
-          echo ::set-output name=principalId::$($principalId)
+          echo "roles=$roles" >> $env:GITHUB_OUTPUT
+          echo "principalId=$principalId" >> $env:GITHUB_OUTPUT
         }
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
