@@ -12,13 +12,18 @@ Engineers who need to be able to execute the workflow will need the necessary ac
 
 To use the above workflow in your environment, a DevOps/Cloud engineers will need to be sure to perform the following to configure the GitHub action.
 
-1. **Configure Terraform State Location**
-
-    Terraform utilizes a [state file](https://www.terraform.io/language/state) to store information about the current state of your managed infrastructure and associated configuration. This file will need to be persisted between different runs of the workflow. The recommended approach is to store this file within an Azure Storage Account or other similar remote backend. Normally, this storage would be provisioned manually or via a separate workflow. The [Terraform backend block](main.tf#L12-L17) will need updated with your selected storage location (see [here](https://developer.hashicorp.com/terraform/language/settings/backends/azurerm) for documentation).
-
-2. **Create GitHub Environments**
+1. **Create GitHub Environments**
 
     The workflows utilizes GitHub Environments and Secrets to store the azure identity information and setup an approval process for deployments. Create an aptly named environment for each Azure Tenant to be interfaced with by following these [instructions](https://docs.github.com/actions/deployment/targeting-different-environments/using-environments-for-deployment#creating-an-environment).
+
+2. **Configure Terraform State Location**
+
+    Terraform utilizes a [state file](https://www.terraform.io/language/state) to store information about the current state of your managed infrastructure and associated configuration. This file will need to be persisted between different runs of the workflow. This solution is currently configured to store this file within an Azure Storage Account. If you wish to change the backend storage to another provider, update the [Terraform backend block](main.tf#L12-L17) with your preferred provider. For the current configuration using Azure Storage Account, add the following environment variables to each Azure for each environment you created above:
+
+    - `TF_VAR_backend_resource_group_name` : The name of the Azure Resource group that contains the Azure Storage account you wish to use as backend storage
+    - `TF_VAR_backend_storage_account_name` : The name of the Azure Storage Account you wish to use as backend storage
+    - `TF_VAR_backend_container_name` : The name of the storage container in the Azure Storage Account you wish to use as backend storage; default is 'tfstate'
+    - `TF_VAR_backend_key` : The key to be used in the storage container in the Azure Storage Account you wish to use as backend storage; default is 'terraform.tfstate'
 
 3. **Setup Azure Identity**:
 
@@ -33,3 +38,4 @@ To use the above workflow in your environment, a DevOps/Cloud engineers will nee
     - `AZURE_SUBSCRIPTION_ID` : The subscription ID where the app registration is defined.
 
     Instructions to add the secrets to the environment can be found [here](https://docs.github.com/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-an-environment).
+
