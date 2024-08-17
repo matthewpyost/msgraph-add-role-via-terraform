@@ -1,0 +1,63 @@
+name: 'Main'
+run-name: 'Add MS Graph app role'
+
+on: 
+  workflow_dispatch:
+    inputs:
+      principal_object_id:
+        description: 'The object ID of the Managed Identity the roles should be added to'     
+        required: true
+      roles:
+        description: 'A comma delimited list of any of the following: Directory.Read.All, User.Read.All, Group.Read.All, Application.ReadWrite.OwnedBy'
+        required: true
+      environment:
+        description: 'Environment to run in'
+        type: environment
+        required: true        
+        
+defaults:
+  run:
+    working-directory: ./automated
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+  ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+  ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Construct Variables
+      id: tf-variables
+      shell: pwsh
+      run: |
+        {
+          $roles = 'roles=[\"' + (${{github.event.inputs.principal_object_id}} -join '\",\"') + '\"]'
+          $principalId = ""principal_object_id=${{github.event.inputs.principal_object_id}}"
+          echo ::set-output name=roles::$($roles)
+          echo ::set-output name=principalId::$($principalId)
+        }
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_wrapper: false
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform init
+
+    # Terraform Apply
+    - name: Terraform Apply
+      run: terraform apply -auto-approve -var '${{steps.tf-variables.output.roles}}' -var '${{steps.tf-variables.output.principalId}}' -auto-approve -input=false -compact-warnings
