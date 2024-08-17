@@ -41,12 +41,11 @@ jobs:
       id: tf-variables
       shell: pwsh
       run: |
-        {
-          $roles = 'roles=["' + ("${{github.event.inputs.roles}}" -join '","') + '"]'
+          $roles = "${{github.event.inputs.roles}}".replace(', ',',').replace(',','","')
+          $roles = 'roles=["' + $roles + '"]'
           $principalId = "principal_object_id=${{github.event.inputs.principal_object_id}}"
-          echo "roles=$roles" >> $env:GITHUB_OUTPUT
-          echo "principalId=$principalId" >> $env:GITHUB_OUTPUT
-        }
+          echo roles=$roles >> $env:GITHUB_OUTPUT
+          echo principalId=$principalId >> $env:GITHUB_OUTPUT
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
