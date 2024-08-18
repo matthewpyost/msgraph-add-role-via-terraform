@@ -15,10 +15,6 @@ on:
         description: 'A comma delimited list of any of the following: Directory.Read.All, User.Read.All, Group.Read.All, Application.ReadWrite.OwnedBy'
         required: true
         
-defaults:
-  run:
-    working-directory: ./automated
-
 permissions:
   id-token: write
   contents: read

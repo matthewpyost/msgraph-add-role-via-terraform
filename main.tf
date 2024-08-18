@@ -1,3 +1,22 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0.2"
+    }
+  }
+
+  required_version = ">= 1.1.0"
+
+  backend "azurerm" {
+    use_oidc  = true
+  }
+}
+
+provider "azuread" {
+  use_oidc = true
+}
+
 data "azuread_application_published_app_ids" "well_known" {}
 
 resource "azuread_service_principal" "msgraph" {
